@@ -20,6 +20,12 @@ public class Player {
         health -= damage;
     }
 
+    // Add heal
+    public void heal(int amount) {
+        health += amount;
+        System.out.println(name + " healed " + amount + " HP!");
+    }
+
     // Add gold
     public void addGold(int amount) {
         gold += amount;
