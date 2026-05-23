@@ -19,6 +19,9 @@ public class Main {
         buildWorld();
 
         System.out.println("\nWelcome, " + player.getName() + "! Your adventure begins...");
+
+        // Start game loop
+        gameLoop();
     }
 
     private static void buildWorld() {
@@ -46,5 +49,62 @@ public class Main {
 
         // Start in entrance
         currentRoom = entrance;
+    }
+
+    private static void gameLoop() {
+        while (player.isAlive()) {
+            currentRoom.displayRoom();
+            player.displayStats();
+
+            System.out.print("\nWhat do you do? (go north/south/east/west, fight, take, quit): ");
+            String input = scanner.nextLine().toLowerCase().trim();
+
+            if (input.equals("quit")) {
+                System.out.println("Thanks for playing!");
+                break;
+            } else if (input.startsWith("go ")) {
+                move(input.substring(3));
+            } else if (input.equals("fight")) {
+                fight();
+            } else if (input.equals("take")) {
+                takeItem();
+            } else {
+                System.out.println("Invalid command. Try again.");
+            }
+
+            // Check if player is dead
+            if (!player.isAlive()) {
+                System.out.println("\nYOU DIED");
+            }
+        }
+    }
+
+    private static void move(String direction) {
+        Room nextRoom = null;
+
+        switch (direction) {
+            case "north": nextRoom = currentRoom.getNorth(); break;
+            case "south": nextRoom = currentRoom.getSouth(); break;
+            case "east": nextRoom = currentRoom.getEast(); break;
+            case "west": nextRoom = currentRoom.getWest(); break;
+            default: System.out.println("Invalid direction."); return;
+        }
+
+        if (nextRoom == null) {
+            System.out.println("Does not open from this side");
+        } else if (currentRoom.hasEnemy()) {
+            System.out.println("Defeat the enemy to continue!");
+        } else {
+            currentRoom = nextRoom;
+            System.out.println("You move " + direction + ".");
+        }
+    }
+
+    private static void fight() {
+        System.out.println("Fight command coming soon!");
+    }
+
+    private static void takeItem() {
+        System.out.println("Take command coming soon!");
     }
 }
