@@ -53,9 +53,9 @@ public class Room {
         }
 
         System.out.println("\nExits:");
-        if (north != null) System.out.println("  NORTH");
-        if (south != null) System.out.println("  SOUTH");
-        if (east != null) System.out.println("  EAST");
-        if (west != null) System.out.println("  WEST");
+        if (north != null) System.out.println("↑ NORTH");
+        if (south != null) System.out.println("↓ SOUTH");
+        if (east != null) System.out.println("→ EAST");
+        if (west != null) System.out.println("← WEST");
     }
 }

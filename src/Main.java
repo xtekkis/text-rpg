@@ -107,17 +107,17 @@ public class Main {
         }
 
         Enemy enemy = currentRoom.getEnemy();
-        System.out.println("\nFighting " + enemy.getName() + "!");
+        System.out.println("\nFighting the " + enemy.getName() + "!");
 
         while (player.isAlive() && enemy.isAlive()) {
             // Player attacks
             int playerDamage = 20;
             enemy.takeDamage(playerDamage);
-            System.out.println("You deal " + playerDamage + " damage to " + enemy.getName());
+            System.out.println("You deal " + playerDamage + " damage to the " + enemy.getName());
             System.out.println(enemy.getName() + " health: " + enemy.getHealth());
 
             if (!enemy.isAlive()) {
-                System.out.println("You defeated " + enemy.getName() + "!");
+                System.out.println("You defeated the " + enemy.getName() + "!");
                 player.addGold(enemy.getGoldReward());
                 System.out.println("You earned " + enemy.getGoldReward() + " gold!");
                 break;
@@ -131,6 +131,20 @@ public class Main {
     }
 
     private static void takeItem() {
-        System.out.println("Take command coming soon!");
+        if (!currentRoom.hasItem()) {
+            System.out.println("There is no item here.");
+            return;
+        }
+
+        Item item = currentRoom.getItem();
+        System.out.println("You picked up " + item.getName() + "!");
+        System.out.println(item.getDescription());
+
+        if (item.getHealAmount() > 0) {
+            player.heal(item.getHealAmount());
+        }
+
+        // Remove item from room after taking it
+        currentRoom.setItem(null);
     }
 }
