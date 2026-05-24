@@ -101,7 +101,33 @@ public class Main {
     }
 
     private static void fight() {
-        System.out.println("Fight command coming soon!");
+        if (!currentRoom.hasEnemy()) {
+            System.out.println("There is no enemy here.");
+            return;
+        }
+
+        Enemy enemy = currentRoom.getEnemy();
+        System.out.println("\nFighting " + enemy.getName() + "!");
+
+        while (player.isAlive() && enemy.isAlive()) {
+            // Player attacks
+            int playerDamage = 20;
+            enemy.takeDamage(playerDamage);
+            System.out.println("You deal " + playerDamage + " damage to " + enemy.getName());
+            System.out.println(enemy.getName() + " health: " + enemy.getHealth());
+
+            if (!enemy.isAlive()) {
+                System.out.println("You defeated " + enemy.getName() + "!");
+                player.addGold(enemy.getGoldReward());
+                System.out.println("You earned " + enemy.getGoldReward() + " gold!");
+                break;
+            }
+
+            // Enemy attacks back
+            player.takeDamage(enemy.getDamage());
+            System.out.println(enemy.getName() + " deals " + enemy.getDamage() + " damage to you!");
+            System.out.println("Your health: " + player.getHealth());
+        }
     }
 
     private static void takeItem() {

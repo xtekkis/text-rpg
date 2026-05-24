@@ -46,7 +46,7 @@ public class Room {
         System.out.println(description);
 
         if (hasEnemy()) {
-            System.out.println("⚠ Enemy here: " + enemy.getName());
+            System.out.println("Enemy here: " + enemy.getName());
         }
         if (hasItem()) {
             System.out.println("Item here: " + item.getName());
