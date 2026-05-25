@@ -78,6 +78,16 @@ public class Main {
             if (!player.isAlive()) {
                 System.out.println("\nYOU DIED");
             }
+
+            // Check if player has won by defeating the boss
+            if (!currentRoom.hasEnemy() && currentRoom.getName().equals("Boss Chamber")) {
+                System.out.println("\n================================");
+                System.out.println("You defeated the Dark Knight!");
+                System.out.println("You have conquered the dungeon!");
+                System.out.println("Final gold: " + player.getGold());
+                System.out.println("================================");
+                break;
+            }
         }
     }
 
