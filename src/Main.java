@@ -1,9 +1,11 @@
 import java.util.Scanner;
+import java.util.Random;
 
 public class Main {
     private static Player player;
     private static Room currentRoom;
     private static Scanner scanner = new Scanner(System.in);
+    private static Random random = new Random();
 
     public static void main(String[] args) {
         System.out.println("================================");
@@ -107,26 +109,67 @@ public class Main {
         }
 
         Enemy enemy = currentRoom.getEnemy();
+        boolean isBoss = enemy.getName().equals("Dark Knight");
         System.out.println("\nFighting the " + enemy.getName() + "!");
 
+        if (!isBoss) {
+            System.out.println("(Type 'roll' to attack or 'flee' to escape)");
+        } else {
+            System.out.println("(Type 'roll' to attack - you cannot flee a boss!)");
+        }
+
         while (player.isAlive() && enemy.isAlive()) {
-            // Player attacks
-            int playerDamage = 20;
-            enemy.takeDamage(playerDamage);
-            System.out.println("You deal " + playerDamage + " damage to the " + enemy.getName());
-            System.out.println(enemy.getName() + " health: " + enemy.getHealth());
+            System.out.print("\nYour move: ");
+            String action = scanner.nextLine().toLowerCase().trim();
 
-            if (!enemy.isAlive()) {
-                System.out.println("You defeated the " + enemy.getName() + "!");
-                player.addGold(enemy.getGoldReward());
-                System.out.println("You earned " + enemy.getGoldReward() + " gold!");
-                break;
+            if (action.equals("flee")) {
+                if (isBoss) {
+                    System.out.println("You cannot flee from the " + enemy.getName() + "!");
+                } else {
+                    int fleeDamage = 10;
+                    player.takeDamage(fleeDamage);
+                    System.out.println("You flee and take " + fleeDamage + " damage!");
+                    System.out.println("Your health: " + player.getHealth());
+                    break;
+                }
+            } else if (action.equals("roll")) {
+                System.out.println("Rolling...");
+                try { Thread.sleep(1500); } catch (InterruptedException e) {}
+                int playerRoll = random.nextInt(20) + 1;
+                System.out.println("You rolled a " + playerRoll + "!");
+
+                if (playerRoll >= 10) {
+                    int playerDamage = playerRoll;
+                    enemy.takeDamage(playerDamage);
+                    System.out.println("Hit! You deal " + playerDamage + " damage to the " + enemy.getName());
+                    System.out.println(enemy.getName() + " health: " + enemy.getHealth());
+                } else {
+                    System.out.println("You missed!");
+                }
+
+                if (!enemy.isAlive()) {
+                    System.out.println("You defeated the " + enemy.getName() + "!");
+                    player.addGold(enemy.getGoldReward());
+                    System.out.println("You earned " + enemy.getGoldReward() + " gold!");
+                    break;
+                }
+
+                System.out.println("\n" + enemy.getName() + " is rolling...");
+                try { Thread.sleep(1500); } catch (InterruptedException e) {}
+                int enemyRoll = random.nextInt(20) + 1;
+                System.out.println(enemy.getName() + " rolled a " + enemyRoll + "!");
+
+                if (enemyRoll >= 10) {
+                    int enemyDamage = enemy.getDamage();
+                    player.takeDamage(enemyDamage);
+                    System.out.println("Hit! " + enemy.getName() + " deals " + enemyDamage + " damage to you!");
+                    System.out.println("Your health: " + player.getHealth());
+                } else {
+                    System.out.println(enemy.getName() + " missed!");
+                }
+            } else {
+                System.out.println("Invalid action. Type 'roll' or 'flee'.");
             }
-
-            // Enemy attacks back
-            player.takeDamage(enemy.getDamage());
-            System.out.println(enemy.getName() + " deals " + enemy.getDamage() + " damage to you!");
-            System.out.println("Your health: " + player.getHealth());
         }
     }
 
